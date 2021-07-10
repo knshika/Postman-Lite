@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PostmanLite</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div class="mt-3 mx-4">
+      <div class="row flex-wrap">
+        <div class="col" style="min-width: 350px">
+          <div class="input-group flex-nowrap mb-3">
+            <select class="form-select" style="width: 130px" id="method">
+              <option>GET</option>
+              <option>POST</option>
+              <option>PUT</option>
+              <option>DELETE</option>
+              <option>PATCH</option>
+            </select>
+            <div class="input-group flex-nowrap">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="https://xyz.com"
+                id="url"
+              />
+            </div>
+            <button type="button" class="btn btn-primary" id="send">
+              Send
+            </button>
+          </div>
+
+          <ul class="nav nav-tabs mb-3" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link active"
+                id="query-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#query"
+                type="button"
+                role="tab"
+                aria-controls="query"
+                aria-selected="true"
+              >
+                Query
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                id="auth-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#auth"
+                type="button"
+                role="tab"
+                aria-controls="auth"
+                aria-selected="false"
+              >
+                Auth
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                id="headers-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#headers"
+                type="button"
+                role="tab"
+                aria-controls="headers"
+                aria-selected="false"
+              >
+                Headers
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                id="body-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#body"
+                type="button"
+                role="tab"
+                aria-controls="body"
+                aria-selected="false"
+              >
+                Body
+              </button>
+            </li>
+          </ul>
+          <div class="tab-content" id="myTabContent">
+            <div
+              class="tab-pane fade show active"
+              id="query"
+              role="tabpanel"
+              aria-labelledby="query-tab"
+            >
+              <div class="my-3">Query Parameter</div>
+              <ul class="input-group ps-0" id="addingQuery">
+                <li class="list-group-item d-flex">
+                  <div class="input-group-text">
+                    <input
+                      class="form-check-input mt-0"
+                      type="checkbox"
+                      value=""
+                      aria-label="Checkbox for following text input"
+                    />
+                  </div>
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="parameter"
+                  />
+                  <input type="text" class="form-control" placeholder="value" />
+                </li>
+              </ul>
+              <div class="d-flex">
+                <button
+                  type="button"
+                  class="btn btn-primary ms-auto"
+                  id="addQuery"
+                >
+                  Add
+                </button>
+              </div>
+            </div>
+
+            <div
+              class="tab-pane fade"
+              id="auth"
+              role="tabpanel"
+              aria-labelledby="auth-tab"
+            >
+              <ul class="nav nav-tabs mb-3" id="authRequest" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button
+                    class="nav-link active"
+                    id="basic-auth-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#basic-auth"
+                    type="button"
+                    role="tab"
+                    aria-controls="basic-auth"
+                    aria-selected="true"
+                  >
+                    Basic Auth
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button
+                    class="nav-link"
+                    id="bearer-token-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#bearer-token"
+                    type="button"
+                    role="tab"
+                    aria-controls="bearer-token"
+                    aria-selected="false"
+                  >
+                    Bearer Token
+                  </button>
+                </li>
+              </ul>
+              <div class="tab-content" id="myTabContent">
+                <div
+                  class="tab-pane fade show active"
+                  id="basic-auth"
+                  role="tabpanel"
+                  aria-labelledby="basic-auth-tab"
+                >
+                  <div>Basic Authentication</div>
+
+                  <div class="row mb-3 mt-3">
+                    <label for="username" class="col-sm-3 col-form-label"
+                      >Username</label
+                    >
+                    <div class="col-sm-9">
+                      <input
+                        type="email"
+                        class="form-control"
+                        id="username"
+                        placeholder="username"
+                      />
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label for="inputPassword3" class="col-sm-3 col-form-label"
+                      >Password</label
+                    >
+                    <div class="col-sm-9">
+                      <input
+                        type="password"
+                        class="form-control"
+                        id="inputPassword3"
+                        placeholder="password"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="tab-pane fade"
+                  id="bearer-token"
+                  role="tabpanel"
+                  aria-labelledby="bearer-token-tab"
+                >
+                  <div>Basic Token</div>
+                  <div class="row mb-3 mt-3">
+                    <div class="col-sm-9">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="token"
+                        placeholder="enter token"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="tab-pane fade"
+              id="headers"
+              role="tabpanel"
+              aria-labelledby="headers-tab"
+            >
+              <div>HTTP Headers</div>
+              <ul class="input-group ps-0" id="addingHeader">
+                <li class="list-group-item d-flex">
+                  <div class="input-group-text">
+                    <input
+                      class="form-check-input mt-0"
+                      type="checkbox"
+                      value=""
+                      checked
+                      aria-label="Checkbox for following text input"
+                    />
+                  </div>
+                  <input
+                    type="text"
+                    class="form-control"
+                    aria-label="Text input with checkbox"
+                    placeholder="header"
+                    value="Accept"
+                  />
+                  <input
+                    type="text"
+                    class="form-control"
+                    aria-label="Text input with checkbox"
+                    placeholder="value"
+                    value="*/*"
+                  />
+                </li>
+                <li class="list-group-item d-flex">
+                  <div class="input-group-text">
+                    <input
+                      class="form-check-input mt-0"
+                      type="checkbox"
+                      checked
+                      value=""
+                      aria-label="Checkbox for following text input"
+                    />
+                  </div>
+                  <input
+                    type="text"
+                    class="form-control"
+                    aria-label="Text input with checkbox"
+                    placeholder="header"
+                    value="User-Agent"
+                  />
+                  <input
+                    type="text"
+                    class="form-control"
+                    aria-label="Text input with checkbox"
+                    placeholder="value"
+                    value="Postman Lite (https://www.postmanlite.com)"
+                  />
+                  <!-- this value can cause problem this can cause problem this can cause problem -->
+                </li>
+                <li class="list-group-item d-flex">
+                  <div class="input-group-text">
+                    <input
+                      class="form-check-input mt-0"
+                      type="checkbox"
+                      value=""
+                      aria-label="Checkbox for following text input"
+                    />
+                  </div>
+                  <input
+                    type="text"
+                    class="form-control"
+                    aria-label="Text input with checkbox"
+                    placeholder="header"
+                  />
+                  <input
+                    type="text"
+                    class="form-control"
+                    aria-label="Text input with checkbox"
+                    placeholder="value"
+                  />
+                </li>
+              </ul>
+              <div class="d-flex">
+                <button
+                  type="button"
+                  class="btn btn-primary ms-auto"
+                  id="addHeader"
+                >
+                  Add
+                </button>
+              </div>
+            </div>
+            <div
+              class="tab-pane fade"
+              id="body"
+              role="tabpanel"
+              aria-labelledby="body-tab"
+            >
+              <ul class="nav nav-tabs mb-3" id="bodyContentType" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button
+                    class="nav-link active"
+                    id="json-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#json"
+                    type="button"
+                    role="tab"
+                    aria-controls="json"
+                    aria-selected="true"
+                  >
+                    json
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button
+                    class="nav-link"
+                    id="xml-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#xml"
+                    type="button"
+                    role="tab"
+                    aria-controls="xml"
+                    aria-selected="false"
+                  >
+                    xml
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button
+                    class="nav-link"
+                    id="text-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#text"
+                    type="button"
+                    role="tab"
+                    aria-controls="text"
+                    aria-selected="false"
+                  >
+                    text
+                  </button>
+                </li>
+              </ul>
+              <div class="tab-content" id="bodyContent">
+                <!-- 
+                attention
+                attention
+                attention
+                attention
+                attention -->
+                <div
+                  class="tab-pane fade show active"
+                  role="tabpanel"
+                  aria-labelledby="json-tab"
+                >
+                  <div>JSON Content</div>
+                  <textarea
+                    class="form-control w-100 mt-3"
+                    rows="10"
+                    id="json"
+                  ></textarea>
+                </div>
+                <div
+                  class="tab-pane fade"
+                  role="tabpanel"
+                  aria-labelledby="xml-tab"
+                >
+                  <div>XML Content</div>
+                  <textarea
+                    class="form-control w-100 mt-3"
+                    rows="10"
+                    id="xml"
+                  ></textarea>
+                </div>
+                <div
+                  class="tab-pane fade"
+                  role="tabpanel"
+                  aria-labelledby="text-tab"
+                >
+                  <div>Text Content</div>
+
+                  <textarea
+                    class="form-control w-100 mt-3"
+                    rows="10"
+                    id="text"
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col" style="min-width: 350px;"">
+          <div class="d-flex">
+            <div class="me-2">
+              <span>Status: </span>
+              <span id="responseStatus"></span>
+            </div>
+
+            <div class="me-2">
+              <span>Size: </span>
+              <span id="responseSize"></span>
+            </div>
+
+            <div class="me-2">
+              <span>Time: </span>
+              <span id="responseTime"></span>
+            </div>
+          </div>
+          <ul class="nav nav-tabs mb-3" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link active"
+                id="response-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#response"
+                type="button"
+                role="tab"
+                aria-controls="response"
+                aria-selected="true"
+              >
+                Response
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                id="header-response-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#header-response"
+                type="button"
+                role="tab"
+                aria-controls="header-response"
+                aria-selected="false"
+              >
+                Headers
+              </button>
+            </li>
+          </ul>
+          <div class="tab-content" id="myTabContent">
+            <div
+              class="tab-pane fade show active"
+              id="response"
+              role="tabpanel"
+              aria-labelledby="response-tab"
+            >
+              <div id="showResponse"></div>
+            </div>
+            <div
+              class="tab-pane fade"
+              id="header-response"
+              role="tabpanel"
+              aria-labelledby="header-response-tab"
+            >
+              <div>No Headers Available</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+    <script src="script.js"></script>
+  </body>
+</html>
