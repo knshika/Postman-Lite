@@ -26,7 +26,7 @@ const sendRequest = async () => {
   const method = methodType.value;
   const queries = getQuery();
   const headers = getHeader();
-  const body = getBody();
+  // const body = getBody();
 
   // console.log('Sending request', { method, url, params, headers, body });
   const startTime = Date.now();
@@ -34,7 +34,6 @@ const sendRequest = async () => {
     const result = await fetch(url + "?" + queries, {
       method,
       headers,
-      body,
     });
     const endTime = Date.now();
     // const responseTime = new Date(endTime - startTime);
@@ -142,16 +141,17 @@ const getAuth = () => {
 
 //get content from body weather it is txt or xml or json
 
-const getContentType = () => {
-  const bodyContentSelected = bodyContentType.querySelectorAll("button").value;
-  if (bodyContentSelected === "Json") {
-    return "application/json";
-  } else if (bodyContentSelected === "Text") {
-    return "text/plain";
-  } else if (bodyContentSelected === "Xml") {
-    return "application/xml";
-  }
-};
+// const getContentType = () => {
+//   const bodyContentSelected =
+//     bodyContentType.querySelector("button.active").innerText;
+//   if (bodyContentSelected === "json") {
+//     return "application/json";
+//   } else if (bodyContentSelected === "text") {
+//     return "text/plain";
+//   } else if (bodyContentSelected === "xml") {
+//     return "application/xml";
+//   }
+// };
 
 //getting header parameters which also uses auth and content type
 
@@ -161,10 +161,10 @@ const getHeader = () => {
   if (authorization) {
     headerParam["Authorization"] = authorization;
   }
-  const contentType = getContentType();
-  if (contentType) {
-    headerParam["Content-Type"] = contentType;
-  }
+  // const contentType = getContentType();
+  // if (contentType) {
+  //   headerParam["Content-Type"] = contentType;
+  // }
 
   addingHeader.querySelectorAll("li").forEach((elem) => {
     const inputs = elem.querySelectorAll("input");
@@ -179,13 +179,15 @@ const getHeader = () => {
 
 // get the content of body after selecting its type
 
-const getBody = () => {
-  const bodyContentSelected = bodyContentType.querySelectorAll("button").value;
-  if (bodyContentSelected === "none") {
-    return null;
-    //havent kept any such option
-  } else {
-    const id = bodyContentSelected;
-    return document.querySelector(`#${id}`).value;
-  }
-};
+// const getBody = () => {
+//   const bodyContentSelected =
+//     bodyContentType.querySelector("button.active").innerHTML;
+//   console.log(bodyContentSelected);
+//   if (bodyContentSelected === "none") {
+//     return null;
+//     //havent kept any such option
+//   } else {
+//     const id = bodyContentSelected;
+//     return document.querySelector(`#${id}`).value;
+//   }
+// };
