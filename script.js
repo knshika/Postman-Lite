@@ -1,193 +1,214 @@
-const sendRequestBtn = document.querySelector("#send");
-const urlInput = document.querySelector("#url");
-const methodType = document.querySelector("#method");
-const showResponse = document.querySelector("#showResponse");
-const addQueryBtn = document.querySelector("#addQuery");
-const addingQuery = document.querySelector("#addingQuery");
-const addHeaderBtn = document.querySelector("#addHeader");
-const addingHeader = document.querySelector("#addingHeader");
+const queryAddBtn = document.querySelector("#addQuery");
+const queryList = document.querySelector("#queryList");
+const headerAddBtn = document.querySelector("#addHeader");
+const headerList = document.querySelector("#headerList");
+const authMethods = document.querySelector("#auth-methods");
+const bodyTypes = document.querySelector("#body-types");
+const requestMethod = document.querySelector("#requestMethod");
+const requestURL = document.querySelector("#requestURL");
+const sendBtn = document.querySelector("#sendBtn");
+const responseText = document.querySelector("#responseText");
 const basicAuth = document.querySelector("#basic-auth");
-const authRequest = document.querySelector("#authRequest");
-const bearerTokenInput = document.querySelector("#token");
-const bodyContentType = document.querySelector("#bodyContentType");
-const responseStatusArea = document.querySelector("#responseStatus");
-const responseSizeArea = document.querySelector("#responseSize");
-const responseTimeArea = document.querySelector("#responseTime");
-// const methodType = document.querySelector("#bodyContent");
-// const methodType = document.querySelector("#bodyContent");
-// const methodType = document.querySelector("#bodyContent");
+const bearerToken = document.querySelector("#bearer-token");
+const statusTextArea = document.querySelector("#status-area");
+const sizeTextArea = document.querySelector("#size-area");
+const timeTextArea = document.querySelector("#time-area");
+//const basic-auth = document.querySelector("#basic-auth");
 
-//sending request of input url and method after send button is clicked
-
-const sendRequest = async () => {
-  // https://dog.ceo/api/breeds/image/random
-  sendRequestBtn.setAttribute("disabled", true);
-  const url = urlInput.value;
-  const method = methodType.value;
-  const queries = getQuery();
-  const headers = getHeader();
-  // const body = getBody();
-
-  // console.log('Sending request', { method, url, params, headers, body });
-  const startTime = Date.now();
-  try {
-    const result = await fetch(url + "?" + queries, {
-      method,
-      headers,
-    });
-    const endTime = Date.now();
-    // const responseTime = new Date(endTime - startTime);
-    // const redableResponseTime = responseTime.getSeconds() * 1000 + responseTime.getMilliseconds() + "ms";
-    const responseTime = endTime - startTime;
-    responseTimeArea.innerText = responseTime + "ms";
-    const response = await result.text();
-    console.log("result", response);
-    showResponse.innerText = response;
-    responseStatusArea.innerText = result.status;
-  } catch (e) {
-    const endTime = Date.now();
-    const responseTime = endTime - startTime;
-    responseTimeArea.innerText = responseTime + "ms";
-  }
-};
-
-sendRequestBtn.addEventListener("click", sendRequest);
-
-//adding query parameters using add query button
-
-const addQueryTemplate = ` <div class="input-group-text">
-<input
-  class="form-check-input mt-0"
-  type="checkbox"
-  value=""
-  aria-label="Checkbox for following text input"
-/>
-</div>
-<input
-type="text"
-class="form-control"
-placeholder="parameter"
-/>
-<input type="text" class="form-control" placeholder="value" />`;
-
-addQueryBtn.addEventListener("click", () => {
-  const queryList = document.createElement("li");
-  queryList.className = "list-group-item d-flex";
-  queryList.innerHTML = addQueryTemplate;
-  addingQuery.append(queryList);
-});
-
-//adding header parameters using add header button
-
-const addHeaderTemplate = ` <div class="input-group-text">
-<input
-  class="form-check-input mt-0"
-  type="checkbox"
-  value=""
-  aria-label="Checkbox for following text input"
-/>
-</div>
-<input
-type="text"
-class="form-control"
-aria-label="Text input with checkbox"
-placeholder="header"
-/>
-<input
-type="text"
-class="form-control"
-aria-label="Text input with checkbox"
-placeholder="value"
-/>`;
-
-addHeaderBtn.addEventListener("click", () => {
-  const headerList = document.createElement("li");
-  headerList.className = "list-group-item d-flex";
-  headerList.innerHTML = addHeaderTemplate;
-  addingHeader.append(headerList);
-});
-
-//storing all the query parameters from query list in map
+//getting all the query parameters
 
 const getQuery = () => {
-  let queryPara = {};
-  //why use for each and map difference
-  addingQuery.querySelectorAll("li").forEach((elem) => {
+  const queryParams = {};
+  queryList.querySelectorAll("li").forEach((elem) => {
     const inputs = elem.querySelectorAll("input");
-    if (inputs.length === 0) return;
+    if (inputs.length == 0) return;
     if (!inputs[0].checked) return;
     const key = inputs[1].value;
     const value = inputs[2].value;
-    queryPara[key] = value;
+    queryParams[key] = value;
   });
-  //return the query string using urlSeacrhParams
-  const urlSearchParams = new URLSearchParams(queryPara);
-  return urlSearchParams.toString();
+  const urlSearchPara = new URLSearchParams(queryParams);
+  return urlSearchPara.toString();
 };
 
-//getting auth using basic and and bearer token
+//getting authentication types
 
 const getAuth = () => {
-  if (authRequest.value === "Basic Auth") {
-    const basicAuthInputs = basicAuth.querySelectorAll("input");
-    const username = basicAuthInputs[0].values;
-    const password = basicAuthInputs[1].values;
-
-    return "Basic " + new buffer(username + ":" + password).toString("base64");
-  } else if (authRequest.value === "Bearer Token") {
-    return "Bearer " + bearerTokenInput.value;
+  if (authMethods.value === "basic-auth") {
+    const username = basicAuth.querySelector("#username").value;
+    const password = basicAuth.querySelector("#password").value;
+    return "Basic " + btoa(username + ":" + password);
+  } else if (authMethods.value === "bearer-token") {
+    return "Bearer " + bearerToken.querySelector("#token").value;
   }
 };
 
-//get content from body weather it is txt or xml or json
+//getting body content
 
-// const getContentType = () => {
-//   const bodyContentSelected =
-//     bodyContentType.querySelector("button.active").innerText;
-//   if (bodyContentSelected === "json") {
-//     return "application/json";
-//   } else if (bodyContentSelected === "text") {
-//     return "text/plain";
-//   } else if (bodyContentSelected === "xml") {
-//     return "application/xml";
-//   }
-// };
+const getBody = () => {
+  const selectedType = bodyTypes.value;
+  if (selectedType === "none") {
+    return null;
+  } else {
+    return document.querySelector(`#${selectedType} >textarea`).value;
+  }
+};
 
-//getting header parameters which also uses auth and content type
+const getContentType = () => {
+  const selectedValue = bodyTypes.value;
+  if (selectedValue === "body-json") {
+    return "application/json";
+  } else if (selectedValue === "body-text") {
+    return "text/plain";
+  } else if (selectedValue === "body-xml") {
+    return "application/xml";
+  }
+};
 
-const getHeader = () => {
-  let headerParam = {};
+//getting all the header parameters
+
+const getHeaders = () => {
+  const headerParams = {};
   const authorization = getAuth();
   if (authorization) {
-    headerParam["Authorization"] = authorization;
+    headerParams["Authorization"] = authorization;
   }
-  // const contentType = getContentType();
-  // if (contentType) {
-  //   headerParam["Content-Type"] = contentType;
-  // }
-
-  addingHeader.querySelectorAll("li").forEach((elem) => {
+  const contentType = getContentType();
+  if (contentType) {
+    headerParams["content-type"] = contentType;
+  }
+  headerList.querySelectorAll("li").forEach((elem) => {
     const inputs = elem.querySelectorAll("input");
-    if (inputs.length === 0) return;
+    if (inputs.length == 0) return;
     if (!inputs[0].checked) return;
     const key = inputs[1].value;
     const value = inputs[2].value;
-    headerParam[key] = value;
+    headerParams[key] = value;
   });
-  return headerParam;
+
+  return headerParams;
 };
 
-// get the content of body after selecting its type
+// handeling send button
 
-// const getBody = () => {
-//   const bodyContentSelected =
-//     bodyContentType.querySelector("button.active").innerHTML;
-//   console.log(bodyContentSelected);
-//   if (bodyContentSelected === "none") {
-//     return null;
-//     //havent kept any such option
-//   } else {
-//     const id = bodyContentSelected;
-//     return document.querySelector(`#${id}`).value;
-//   }
-// };
+const handleSend = async () => {
+  const url = requestURL.value;
+  const method = requestMethod.value;
+  const query = getQuery();
+  const headers = getHeaders();
+  const body = getBody();
+
+  const startTime = Date.now();
+  try {
+    const result = await fetch(url + "?" + query, { method, headers, body });
+
+    const endTime = Date.now();
+    const totalTime = endTime - startTime;
+    timeTextArea.innerText = totalTime + "ms";
+
+    const response = await result.text();
+    responseText.innerText = response;
+    statusTextArea.innerText = result.status;
+
+    sizeTextArea.innerText =
+      result.headers.get("Content-Length") || response.length;
+  } catch (e) {
+    const endTime = Date.now();
+    const totalTime = endTime - startTime;
+    timeTextArea.innerText = totalTime + "ms";
+    responseText.innerText = e.message;
+    statusTextArea.innerText = " ";
+  }
+};
+
+sendBtn.addEventListener("click", handleSend);
+
+//adding query parameters
+
+const queryTemplate = `<li class="list-group-item d-flex align-items-center">
+<input
+  class="border-light me-2"
+  type="checkbox"
+  value=""
+  style="width: 40px; height: 40px"
+  aria-label="..."
+/>
+<input
+  type="text"
+  class="form-control me-2"
+  placeholder="parameter"
+  aria-label="parameter"
+/>
+<input
+  type="text"
+  class="form-control"
+  placeholder="value"
+  aria-label="value"
+/>
+</li>`;
+
+const addingQueryPara = () => {
+  queryList.innerHTML += queryTemplate;
+};
+
+queryAddBtn.addEventListener("click", addingQueryPara);
+
+//adding header parameters
+
+const headerTemplate = `<li class="list-group-item d-flex align-items-center">
+<input
+  class="border-light me-2"
+  type="checkbox"
+  value=""
+  style="width: 40px; height: 40px"
+  aria-label="..."
+/>
+<input
+  type="text"
+  class="form-control me-2"
+  placeholder="parameter"
+  aria-label="parameter"
+/>
+<input
+  type="text"
+  class="form-control"
+  placeholder="value"
+  aria-label="value"
+/>
+</li>`;
+
+const addingHeaderPara = () => {
+  headerList.innerHTML += headerTemplate;
+};
+
+headerAddBtn.addEventListener("click", addingHeaderPara);
+
+//changing auth tabs with select button
+
+const changeAuthTab = () => {
+  const currentTab = authMethods.value;
+  document.querySelectorAll(".auth-tabs").forEach((tab) => {
+    if (tab.id === currentTab) {
+      tab.classList.remove("visually-hidden");
+    } else {
+      tab.classList.add("visually-hidden");
+    }
+  });
+};
+
+authMethods.addEventListener("change", changeAuthTab);
+
+//changing auth tabs with select button
+
+const changeBodyTab = () => {
+  const currentTab = bodyTypes.value;
+  document.querySelectorAll(".body-tabs").forEach((tab) => {
+    if (tab.id === currentTab) {
+      tab.classList.remove("visually-hidden");
+    } else {
+      tab.classList.add("visually-hidden");
+    }
+  });
+};
+
+bodyTypes.addEventListener("change", changeBodyTab);
